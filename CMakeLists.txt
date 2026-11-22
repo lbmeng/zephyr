@@ -2318,6 +2318,10 @@ add_custom_command(
   COMMAND_EXPAND_LISTS
   )
 
+if(CONFIG_BUILD_OUTPUT_UIMAGE)
+  include("${ZEPHYR_BASE}/cmake/uimage.cmake")
+endif()
+
 # To populate with hex files to merge, do the following:
 #  set_property(GLOBAL APPEND PROPERTY HEX_FILES_TO_MERGE ${my_local_list})
 # Note that the zephyr.hex file will not be included automatically.

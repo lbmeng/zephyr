@@ -784,6 +784,62 @@ config BUILD_OUTPUT_BIN
 	  Build a "raw" binary zephyr/zephyr.bin in the build directory.
 	  The name of this file can be customized with CONFIG_KERNEL_BIN_NAME.
 
+config BUILD_OUTPUT_UIMAGE
+	bool "Build a U-Boot legacy uImage"
+	select BUILD_OUTPUT_BIN
+	help
+	  Wrap the raw binary in an uncompressed U-Boot legacy image at
+	  zephyr/zephyr.uImage. Requires the host mkimage tool from U-Boot.
+	  The name of this file follows CONFIG_KERNEL_BIN_NAME.
+	  Raw binary output is enabled automatically.
+
+if BUILD_OUTPUT_UIMAGE
+
+config BUILD_OUTPUT_UIMAGE_ARCH
+	string "uImage architecture override"
+	help
+	  Architecture name accepted by mkimage -A. Leave empty to determine
+	  the architecture from the ELF machine type and class.
+
+config BUILD_OUTPUT_UIMAGE_OS
+	string "uImage operating system"
+	default "linux"
+	help
+	  Operating system name accepted by mkimage -O. This selects the
+	  U-Boot boot handler and its calling convention. The default uses
+	  the Linux handler, as required by some U-Boot based platforms.
+
+config BUILD_OUTPUT_UIMAGE_TYPE
+	string "uImage type"
+	default "kernel"
+	help
+	  Image type accepted by mkimage -T, such as kernel or standalone.
+	  The selected type must support an uncompressed legacy image.
+
+config BUILD_OUTPUT_UIMAGE_NAME
+	string "uImage description"
+	default "Zephyr"
+	help
+	  Image description stored in the header, limited to 32 UTF-8 bytes.
+
+config BUILD_OUTPUT_UIMAGE_LOAD_ADDRESS
+	string "uImage load address override"
+	help
+	  Load address as a decimal or 0x-prefixed hexadecimal string. Leave
+	  empty to use the lowest load address of the file-backed allocated
+	  ELF sections represented in the binary. This address is the BIN
+	  payload destination, not the address of the uImage header.
+	  Legacy uImage addresses are limited to 32 bits.
+
+config BUILD_OUTPUT_UIMAGE_ENTRY_POINT
+	string "uImage entry point override"
+	help
+	  Entry point as a decimal or 0x-prefixed hexadecimal string. Leave
+	  empty to use the ELF entry point. Legacy uImage addresses are
+	  limited to 32 bits.
+
+endif # BUILD_OUTPUT_UIMAGE
+
 config BUILD_OUTPUT_EFI
 	bool "Build as an EFI application"
 	depends on X86_64

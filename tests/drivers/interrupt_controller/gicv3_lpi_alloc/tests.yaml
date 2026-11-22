@@ -1,0 +1,31 @@
+# SPDX-FileCopyrightText: Copyright (c) 2026 Process Mission
+# SPDX-License-Identifier: Apache-2.0
+
+common:
+  ignore_faults: true
+  tags:
+    - interrupt
+    - arm64
+  platform_allow:
+    - qemu_cortex_a53
+  integration_platforms:
+    - qemu_cortex_a53
+  harness: console
+  harness_config:
+    type: one_line
+    regex:
+      - "GIC_LPI_ALLOC_TEST_PASS"
+  timeout: 20
+tests:
+  drivers.interrupt_controller.gicv3_lpi_alloc.property_failure:
+    extra_configs:
+      - CONFIG_TEST_LPI_ALLOCATION_FAILURE=1
+  drivers.interrupt_controller.gicv3_lpi_alloc.pending_failure:
+    extra_configs:
+      - CONFIG_TEST_LPI_ALLOCATION_FAILURE=2
+  drivers.interrupt_controller.gicv3_lpi_alloc.secondary_failure:
+    extra_configs:
+      - CONFIG_TEST_LPI_ALLOCATION_FAILURE=2
+      - CONFIG_TEST_LPI_ALLOCATION_FAILURE_CPU=1
+      - CONFIG_SMP=y
+      - CONFIG_MP_MAX_NUM_CPUS=2

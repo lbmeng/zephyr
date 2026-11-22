@@ -1,0 +1,18 @@
+# SPDX-FileCopyrightText: Copyright (c) 2026 Process Mission
+# SPDX-License-Identifier: Apache-2.0
+
+mainmenu "GICv3 LPI allocation tests"
+
+config TEST_LPI_ALLOCATION_FAILURE
+	int "LPI allocation failure to inject"
+	default 0
+	range 0 2
+	help
+	  Inject a property-table allocation failure with 1 or a pending-table
+	  allocation failure with 2. Zero leaves allocations unchanged.
+
+config TEST_LPI_ALLOCATION_FAILURE_CPU
+	int "CPU on which to inject the allocation failure"
+	default 0
+
+source "Kconfig.zephyr"

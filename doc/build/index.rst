@@ -18,3 +18,4 @@ Build and Configuration Systems
    version/index.rst
    flashing/index.rst
    signing/index.rst
+   uimage.rst

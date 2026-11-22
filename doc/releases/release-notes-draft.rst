@@ -209,6 +209,10 @@ Devicetree
 Other notable changes
 *********************
 
+* Builds can automatically package the final binary as a U-Boot legacy image, with architecture,
+  load address and entry point derived from the ELF and configurable boot metadata. See
+  :ref:`build_output_uimage` for configuration and boot firmware requirements.
+
 * Architectures
 
   * ARM Cortex-A/R: with :kconfig:option:`CONFIG_USE_SWITCH`, ISRs run in SYS mode and nested

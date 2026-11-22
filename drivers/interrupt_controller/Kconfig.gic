@@ -65,20 +65,21 @@ config GIC_V3_ITS
 	  HEAP_MEM_POOL_ADD_SIZE_GIC_V3_ITS below accounts for.
 
 # The GICv3 and ITS drivers allocate, from the system heap:
-# - LPI property table: one 64K table, 64K aligned, shared by all CPUs
+# - LPI property table: one 64K table, 4K aligned, shared by all CPUs
 # - LPI pending table: one 64K table, 64K aligned, per redistributor/CPU
-# - Devices table: 128x4K, 4K aligned
-# - Interrupt collections table: 1x4K, 4K aligned
+# - Devices table: 512K for 16-bit DeviceIDs with 8-byte entries
+# - Interrupt collections table: at least one hardware-supported page
 #
-# 13x64K covers those on a four-CPU system. It does not include the interrupt
-# translation tables, which are 256-byte aligned and sized per device: a 32-ITE
-# table needs 256 bytes, so the remainder leaves room for a useful number of
-# them. Boards needing more can raise CONFIG_HEAP_MEM_POOL_SIZE, and an
-# application that has measured its own requirement can opt out of the minimum
-# with CONFIG_HEAP_MEM_POOL_IGNORE_MIN.
+# Device and collection table pages can be 64K. The heap allocator temporarily
+# overallocates for alignment, in addition to keeping per-allocation metadata
+# Reserve 1 MiB for one CPU and 2 MiB for SMP to cover four CPUs, 64K table
+# pages and alignment overhead, with room for per-device interrupt translations
+# Larger CPU counts or hardware tables may need a higher HEAP_MEM_POOL_SIZE
+# Applications with measured requirements can use HEAP_MEM_POOL_IGNORE_MIN
 config HEAP_MEM_POOL_ADD_SIZE_GIC_V3_ITS
 	int
-	default 851968 if GIC_V3_ITS
+	default 2097152 if GIC_V3_ITS && SMP
+	default 1048576 if GIC_V3_ITS
 
 config GIC_SAFE_CONFIG
 	bool "GIC Distributor Safe Configuration"

@@ -29,3 +29,8 @@ tests:
       - CONFIG_TEST_LPI_ALLOCATION_FAILURE_CPU=1
       - CONFIG_SMP=y
       - CONFIG_MP_MAX_NUM_CPUS=2
+  drivers.interrupt_controller.gicv3_lpi_alloc.boot_up: {}
+  drivers.interrupt_controller.gicv3_lpi_alloc.boot_smp:
+    extra_configs:
+      - CONFIG_SMP=y
+      - CONFIG_MP_MAX_NUM_CPUS=2
